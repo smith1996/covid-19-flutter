@@ -1,3 +1,5 @@
+import 'package:covid19/routes.dart';
+import 'package:covid19/src/utilities/style.dart';
 import 'package:flutter/material.dart';
 
 void main() => runApp(MyApp());
@@ -8,27 +10,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Covid-19',
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text('Material App Bar'),
-        ),
-        body: Center(
-          child: Container(
-            child: Text('Hello World'),
-          ),
-        ),
-      ),
+      theme: appTheme,
+      initialRoute: '/',
+      routes: appRoutes,
     );
   }
 }
-
-/*MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(accentColor: Colors.black),
-      title: 'Covid-19',
-      initialRoute: '/',
-      routes: {
-        '/': (BuildContext context) => CountryListPage(),
-        'infected': (BuildContext context) => InfectedListPage(),
-      },
-    );*/
