@@ -1,10 +1,11 @@
+//import 'package:covid19/src/models/country.dart';
+//import 'package:covid19/src/repositories/country_repository.dart';
+import 'package:covid19/src/screens/country/widgets/country_list.dart';
+import 'package:covid19/src/utilities/app.dart';
+import 'package:flutter/material.dart';
 import 'package:covid19/src/blocs/country_bloc.dart';
 import 'package:covid19/src/models/country.dart';
 import 'package:covid19/src/network/response.dart';
-//import 'package:covid19/src/models/country.dart';
-//import 'package:covid19/src/repositories/country_repository.dart';
-import 'package:covid19/src/utilities/app.dart';
-import 'package:flutter/material.dart';
 
 class CountryListScreen extends StatefulWidget {
   @override
@@ -27,8 +28,14 @@ class _CountryListScreenState extends State<CountryListScreen> {
     print('build');
     return Scaffold(
       appBar: _customAppBar(context),
-      body: _countryListView(),
+      body: _countryBody(),
     );
+  }
+
+  @override
+  void dispose() {
+    _bloc.dispose();
+    super.dispose();
   }
 
   // MARK: - Build custom app bar
@@ -54,7 +61,7 @@ class _CountryListScreenState extends State<CountryListScreen> {
     );
   }
 
-  Widget _countryListView() {
+  Widget _countryBody() {
     return StreamBuilder<Response<Country>>(
       stream: _bloc.countryStream,
       //initialData: initialData ,
@@ -65,42 +72,39 @@ class _CountryListScreenState extends State<CountryListScreen> {
               return Center(child: CircularProgressIndicator());
               break;
             case Status.SUCCESS:
-              print(snapshot.data.data.items);
-              return Container();
+              final countryList = snapshot.data.data.items;
+              return CountryList(countries: countryList);
               break;
             default:
-              return Container(child: Text(snapshot.data.message));
+              //final message = snapshot.data.message;
+              return _error(); //Center(child: Text(snapshot.data.message));
               break;
           }
         }
         return Container();
       },
     );
-    /*FutureBuilder(
-      future: countryRepository.getCountries(),
-      //initialData: InitialData,
-      builder: (BuildContext context, AsyncSnapshot<Country> snapshot) {
-        if (snapshot.hasData) {
-          print(snapshot.data.items);
-          return Container();
-        } else {
-          return Center(child: CircularProgressIndicator());
-        }
-      },
-    );*/
+  }
 
-    /*ListView(
-      children: <Widget>[
-        ListTile(
-          title: Text('Item 1'),
-          onTap: () {},
-        ),
-        Divider(),
-        ListTile(title: Text('Item 2')),
-        Divider(),
-        ListTile(title: Text('Item 3')),
-        Divider(),
-      ],
-    );*/
+  Widget _error() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Text('Hubo un error en la conexion. Intentalo mas tarde.',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.black87,
+                fontSize: 15,
+              )),
+          SizedBox(height: 8),
+          RaisedButton(
+            color: Colors.black87,
+            child: Text('Reintentar', style: TextStyle(color: Colors.white)),
+            onPressed: () => _bloc.fetchCountryList(),
+          )
+        ],
+      ),
+    );
   }
 }

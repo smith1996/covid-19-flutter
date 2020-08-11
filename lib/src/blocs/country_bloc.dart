@@ -22,7 +22,7 @@ class CountryBloc {
     countrySink.add(Response.loading('Fetching countries'));
     try {
       Country countries = await _countryRespository.getCountries();
-      print(countries.items);
+      //print(countries.items);
       countrySink.add(Response.successful(countries));
     } catch (error) {
       print(error.toString());
