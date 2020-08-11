@@ -1,9 +1,30 @@
+import 'package:covid19/src/blocs/country_bloc.dart';
+import 'package:covid19/src/models/country.dart';
+import 'package:covid19/src/network/response.dart';
+//import 'package:covid19/src/models/country.dart';
+//import 'package:covid19/src/repositories/country_repository.dart';
 import 'package:covid19/src/utilities/app.dart';
 import 'package:flutter/material.dart';
 
-class CountryListScreen extends StatelessWidget {
+class CountryListScreen extends StatefulWidget {
+  @override
+  _CountryListScreenState createState() => _CountryListScreenState();
+}
+
+class _CountryListScreenState extends State<CountryListScreen> {
+  //final countryRepository = CountryRespository();
+  CountryBloc _bloc;
+
+  @override
+  void initState() {
+    print('initState');
+    _bloc = CountryBloc();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
+    print('build');
     return Scaffold(
       appBar: _customAppBar(context),
       body: _countryListView(),
@@ -34,7 +55,41 @@ class CountryListScreen extends StatelessWidget {
   }
 
   Widget _countryListView() {
-    return ListView(
+    return StreamBuilder<Response<Country>>(
+      stream: _bloc.countryStream,
+      //initialData: initialData ,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          switch (snapshot.data.status) {
+            case Status.LOADING:
+              return Center(child: CircularProgressIndicator());
+              break;
+            case Status.SUCCESS:
+              print(snapshot.data.data.items);
+              return Container();
+              break;
+            default:
+              return Container(child: Text(snapshot.data.message));
+              break;
+          }
+        }
+        return Container();
+      },
+    );
+    /*FutureBuilder(
+      future: countryRepository.getCountries(),
+      //initialData: InitialData,
+      builder: (BuildContext context, AsyncSnapshot<Country> snapshot) {
+        if (snapshot.hasData) {
+          print(snapshot.data.items);
+          return Container();
+        } else {
+          return Center(child: CircularProgressIndicator());
+        }
+      },
+    );*/
+
+    /*ListView(
       children: <Widget>[
         ListTile(
           title: Text('Item 1'),
@@ -46,6 +101,6 @@ class CountryListScreen extends StatelessWidget {
         ListTile(title: Text('Item 3')),
         Divider(),
       ],
-    );
+    );*/
   }
 }

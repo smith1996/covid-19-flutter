@@ -4,7 +4,7 @@ class Response<T> {
   String message;
 
   Response.loading(this.message) : status = Status.LOADING;
-  Response.successful(this.message) : status = Status.SUCCESS;
+  Response.successful(this.data) : status = Status.SUCCESS;
   Response.error(this.message) : status = Status.ERROR;
 
   @override

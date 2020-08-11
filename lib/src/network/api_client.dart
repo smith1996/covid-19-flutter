@@ -4,7 +4,7 @@ import 'dart:convert';
 import 'dart:io';
 
 class APIClient {
-  final String _baseUrl = 'covid-193.p.rapidapi.com';
+  final String _baseUrl = 'https://covid-193.p.rapidapi.com';
   final Map<String, String> _headers = {
     'Host': '<calculated when request is sent>',
     'x-rapidapi-host': 'covid-193.p.rapidapi.com',
