@@ -19,7 +19,7 @@ class CountryBloc {
   }
 
   void fetchCountryList() async {
-    countrySink.add(Response.loading('Fetching countries'));
+    countrySink.add(Response.loading('Buscando países'));
     try {
       Country countries = await _countryRespository.getCountries();
       //print(countries.items);

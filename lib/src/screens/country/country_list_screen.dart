@@ -1,7 +1,7 @@
-//import 'package:covid19/src/models/country.dart';
-//import 'package:covid19/src/repositories/country_repository.dart';
 import 'package:covid19/src/screens/country/widgets/country_list.dart';
 import 'package:covid19/src/utilities/app.dart';
+import 'package:covid19/src/widgets/error_manager.dart';
+import 'package:covid19/src/widgets/loader_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:covid19/src/blocs/country_bloc.dart';
 import 'package:covid19/src/models/country.dart';
@@ -28,7 +28,7 @@ class _CountryListScreenState extends State<CountryListScreen> {
     print('build');
     return Scaffold(
       appBar: _customAppBar(context),
-      body: _countryBody(),
+      body: _getCountry(),
     );
   }
 
@@ -61,50 +61,29 @@ class _CountryListScreenState extends State<CountryListScreen> {
     );
   }
 
-  Widget _countryBody() {
+  Widget _getCountry() {
     return StreamBuilder<Response<Country>>(
       stream: _bloc.countryStream,
-      //initialData: initialData ,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          switch (snapshot.data.status) {
+          final getData = snapshot.data;
+          switch (getData.status) {
             case Status.LOADING:
-              return Center(child: CircularProgressIndicator());
+              return LoaderManager(message: getData.message);
               break;
             case Status.SUCCESS:
-              final countryList = snapshot.data.data.items;
-              return CountryList(countries: countryList);
+              return CountryList(countries: getData.data.items);
               break;
-            default:
-              //final message = snapshot.data.message;
-              return _error(); //Center(child: Text(snapshot.data.message));
+            case Status.ERROR:
+              return ErrorManager(
+                message: 'Revise su conexión a internet y vuelve a intentar.',
+                onRetryPressed: () => _bloc.fetchCountryList(),
+              );
               break;
           }
         }
         return Container();
       },
-    );
-  }
-
-  Widget _error() {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Text('Hubo un error en la conexion. Intentalo mas tarde.',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Colors.black87,
-                fontSize: 15,
-              )),
-          SizedBox(height: 8),
-          RaisedButton(
-            color: Colors.black87,
-            child: Text('Reintentar', style: TextStyle(color: Colors.white)),
-            onPressed: () => _bloc.fetchCountryList(),
-          )
-        ],
-      ),
     );
   }
 }

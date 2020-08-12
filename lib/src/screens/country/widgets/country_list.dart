@@ -11,7 +11,7 @@ class CountryList extends StatelessWidget {
       itemCount: countries.length,
       separatorBuilder: (context, index) => Divider(
         height: 1.0,
-        color: Colors.black38,
+        color: Colors.black12,
       ),
       itemBuilder: (context, index) {
         return _countryItem(context, countries[index]);
