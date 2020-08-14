@@ -29,13 +29,14 @@ class CountrySearch extends SearchDelegate {
 
   @override
   Widget buildResults(BuildContext context) {
-    // TODO: implement buildResults
-    throw UnimplementedError();
+    if (query.isEmpty || countries == null) return Container();
+    final filterdList = filterByCounty(countries, query);
+    return CountryList(countries: filterdList);
   }
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    if (query.isEmpty) return Container();
+    if (query.isEmpty || countries == null) return Container();
     final filterdList = filterByCounty(countries, query);
     return CountryList(countries: filterdList);
   }

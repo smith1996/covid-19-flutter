@@ -41,14 +41,18 @@ class _InfectedHistoryScreenState extends State<InfectedHistoryScreen> {
     final country = widget.countrySelected;
     return Scaffold(
       appBar: _customAppBar(country),
-      body: (showOnlyTime
-          ? _getInfectedHistory(country)
-          : screens[selectedIndex]),
+      body: (showOnlyTime ? _getInfectedHistory(country) : screensChoose()),
     );
+  }
+
+  Widget screensChoose() {
+    if (screens.length == 0) return Container();
+    return screens[selectedIndex];
   }
 
   @override
   void dispose() {
+    print('dispose screen');
     _bloc.dispose();
     super.dispose();
   }
@@ -77,10 +81,12 @@ class _InfectedHistoryScreenState extends State<InfectedHistoryScreen> {
               children: segmentsTitles,
               groupValue: selectedIndex,
               onValueChanged: (int value) {
-                setState(() {
-                  showOnlyTime = false;
-                  selectedIndex = value;
-                });
+                if (infectedList.length != 0) {
+                  setState(() {
+                    showOnlyTime = false;
+                    selectedIndex = value;
+                  });
+                }
                 print(selectedIndex);
               }),
         ),

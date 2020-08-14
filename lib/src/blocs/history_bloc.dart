@@ -20,7 +20,7 @@ class HistoryBloc {
   }
 
   void fetchInfectedHistory(String country) async {
-    historySink.add(Response.loading('Buscando reporte de infectados'));
+    historySink.add(Response.loading('Obteniendo reporte de infectados'));
     try {
       History infecteds = await _historyRespository.getInfectedHistory(country);
       //print(countries.items);
