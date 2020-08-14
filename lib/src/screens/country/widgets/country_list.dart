@@ -1,3 +1,4 @@
+import 'package:covid19/src/screens/history/infected_history_screen.dart';
 import 'package:flutter/material.dart';
 
 class CountryList extends StatelessWidget {
@@ -26,7 +27,10 @@ class CountryList extends StatelessWidget {
       ),
       onTap: () {
         print('Selecciono el pais: $country');
-        Navigator.pushNamed(context, 'infected', arguments: country);
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) =>
+                InfectedHistoryScreen(countrySelected: country)));
+        //Navigator.pushNamed(context, 'history', arguments: country);
       },
     );
   }

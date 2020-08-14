@@ -1,4 +1,5 @@
 import 'package:covid19/src/screens/country/widgets/country_list.dart';
+import 'package:covid19/src/screens/country/widgets/country_search.dart';
 import 'package:covid19/src/utilities/app.dart';
 import 'package:covid19/src/widgets/error_manager.dart';
 import 'package:covid19/src/widgets/loader_manager.dart';
@@ -15,6 +16,7 @@ class CountryListScreen extends StatefulWidget {
 class _CountryListScreenState extends State<CountryListScreen> {
   //final countryRepository = CountryRespository();
   CountryBloc _bloc;
+  List<String> countryList = new List();
 
   @override
   void initState() {
@@ -54,8 +56,10 @@ class _CountryListScreenState extends State<CountryListScreen> {
     return IconButton(
       icon: Icon(Icons.search),
       onPressed: () {
-        //showSearch(
-        //  context: context, delegate: DataSearch(countries: data), query: '');
+        showSearch(
+            context: context,
+            delegate: CountrySearch(countries: countryList),
+            query: '');
         print('Presiono boton Buscar');
       },
     );
@@ -72,6 +76,7 @@ class _CountryListScreenState extends State<CountryListScreen> {
               return LoaderManager(message: getData.message);
               break;
             case Status.SUCCESS:
+              countryList = getData.data.items;
               return CountryList(countries: getData.data.items);
               break;
             case Status.ERROR:
